@@ -1,11 +1,13 @@
 package ru.netology;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -18,6 +20,11 @@ public class CreditCardDeliveryFormUITest {
     @BeforeEach
     void setUp() {
         open("http://localhost:9999");
+    }
+
+    @AfterEach
+    void tearDown() {
+        close();
     }
 
     @Test
@@ -45,9 +52,23 @@ public class CreditCardDeliveryFormUITest {
         Calendar instance = Calendar.getInstance();
         instance.add(Calendar.DAY_OF_MONTH, 3);
         Date newDate = instance.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
-        String dateText = dateFormat.format(instance);
-        $("[placeholder='Дата встречи']").setValue("dateText");
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String dateText = dateFormat.format(instance);      // Дата не форматируется в String
+        $("[placeholder='Дата встречи']").setValue(dateText);
+        $$("button").find(exactText("Забронировать")).click();
+        $("[data-test-id='notification']").shouldBe(visible, Duration.ofSeconds(15));
+    }
+
+    @Test
+    void shouldPlaceOrderPositiveV3Test() {
+        $("[placeholder='Город']").setValue("Санкт-Петербург");
+        $("[name='name']").setValue("Михаил Салтыков-Щедрин");
+        $("[name='phone']").setValue("+70123456789");
+        $("[data-test-id='agreement']").click();
+        LocalDate localDate = LocalDate.now();
+        LocalDate newDate = localDate.plusDays(3);
+        String dateText = new SimpleDateFormat("dd.MM.yyyy").format(newDate);   // Дата не форматируется в String
+        $("[placeholder='Дата встречи']").setValue(dateText);
         $$("button").find(exactText("Забронировать")).click();
         $("[data-test-id='notification']").shouldBe(visible, Duration.ofSeconds(15));
     }
