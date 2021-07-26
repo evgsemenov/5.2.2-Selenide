@@ -11,7 +11,6 @@ import java.time.format.DateTimeFormatter;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CreditCardDeliveryFormUITest {
 
@@ -37,42 +36,41 @@ public class CreditCardDeliveryFormUITest {
         $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
         $("[data-test-id='agreement']").click();
         $$("button").find(exactText("Забронировать")).click();
-        $("[data-test-id='notification']").shouldBe(visible, Duration.ofSeconds(15));
+        $("[data-test-id='notification']").shouldBe(visible, Duration.ofSeconds(15)).
+                shouldHave(exactText("Успешно!\n" + "Встреча успешно забронирована на " + dateText));
     }
 
-//    @Test
-//    void shouldRequireValidCityIfCityNotIncludeTest() {
-//        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Вашингтон");
-//        LocalDate localDate = LocalDate.now();
-//        LocalDate newDate = localDate.plusDays(3);
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-//        String dateText = newDate.format(formatter);
-//        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
-//        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
-//        $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
-//        $("[data-test-id='agreement']").click();
-//        $$("button").find(exactText("Забронировать")).click();
-//        String expected = "Доставка в выбранный город недоступна";
-//        String actual = $("[data-test-id='city']").$("[input__sub]").getText();
-//        assertEquals(expected.trim(), actual.trim());
-//    }
+    @Test
+    void shouldRequireValidCityIfCityNotIncludeTest() {
+        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Вашингтон");
+        LocalDate localDate = LocalDate.now();
+        LocalDate newDate = localDate.plusDays(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dateText = newDate.format(formatter);
+        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
+        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
+        $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
+        $("[data-test-id='agreement']").click();
+        $$("button").find(exactText("Забронировать")).click();
+        $("[data-test-id='city'].input_invalid .input__sub").shouldBe(visible).
+                shouldHave(exactText("Доставка в выбранный город недоступна"));
+    }
 
-//    @Test
-//    void shouldRequireValidDateIfTwoDaysTest() {
-//        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
-//        LocalDate localDate = LocalDate.now();
-//        LocalDate newDate = localDate.plusDays(2);
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-//        String dateText = newDate.format(formatter);
-//        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
-//        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
-//        $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
-//        $("[data-test-id='agreement']").click();
-//        $$("button").find(exactText("Забронировать")).click();
-//        String expected = "Заказ на выбранную дату невозможен";
-//        String actual = $("[data-test-id='date']").$("[input__sub]").getText();
-//        assertEquals(expected.trim(), actual.trim());
-//    }
+    @Test
+    void shouldRequireValidDateIfTwoDaysTest() {
+        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
+        LocalDate localDate = LocalDate.now();
+        LocalDate newDate = localDate.plusDays(2);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dateText = newDate.format(formatter);
+        $("[data-test-id='date']").$("[class='input__control']").setValue(dateText);
+        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
+        $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
+        $("[data-test-id='agreement']").click();
+        $$("button").find(exactText("Забронировать")).click();
+        $("[data-test-id='date'].input_invalid .input__sub").shouldBe(visible).
+                shouldHave(exactText("Заказ на выбранную дату невозможен"));
+    }
 
     @Test
     void shouldPlaceOrderIfFourDaysPositiveTest() {
@@ -86,92 +84,149 @@ public class CreditCardDeliveryFormUITest {
         $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
         $("[data-test-id='agreement']").click();
         $$("button").find(exactText("Забронировать")).click();
-        $("[data-test-id='notification']").shouldBe(visible, Duration.ofSeconds(15));
+        $("[data-test-id='notification']").shouldBe(visible, Duration.ofSeconds(15)).
+                shouldHave(exactText("Успешно!\n" + "Встреча успешно забронирована на " + dateText));
     }
 
-//    @Test
-//    void shouldRequireValidNameIfNonCyrillicTest() {
-//        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
-//        LocalDate localDate = LocalDate.now();
-//        LocalDate newDate = localDate.plusDays(3);
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-//        String dateText = newDate.format(formatter);
-//        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
-//        $("[data-test-id= 'name']").$("[name ='name']").setValue("John Snow");
-//        $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
-//        $("[data-test-id='agreement']").click();
-//        $$("button").find(exactText("Забронировать")).click();
-//        String expected = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
-//        String actual = $("[data-test-id='name']").$("[input__sub]").getText();
-//        assertEquals(expected.trim(), actual.trim());
-//    }
-//
-//    @Test
-//    void shouldRequireAgreementCheckboxTest() {
-//        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
-//        LocalDate localDate = LocalDate.now();
-//        LocalDate newDate = localDate.plusDays(3);
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-//        String dateText = newDate.format(formatter);
-//        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
-//        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
-//        $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
-//        $$("button").find(exactText("Забронировать")).click();
-//        String expected = "Я соглашаюсь с условиями обработки и использования моих персональных данных";
-//        String actual = $("[data-test-id='agreement']").$("[checkbox__text]").getText();
-//        assertEquals(expected.trim(), actual.trim());
-//    }
-//
-//    @Test
-//    void shouldRequireValidTelephoneNumberIfNoPlusTest() {
-//        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
-//        LocalDate localDate = LocalDate.now();
-//        LocalDate newDate = localDate.plusDays(3);
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-//        String dateText = newDate.format(formatter);
-//        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
-//        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
-//        $("[data-test-id='phone']").$("[name='phone']").setValue("70123456789");
-//        $("[data-test-id='agreement']").click();
-//        $$("button").find(exactText("Забронировать")).click();
-//        String expected = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
-//        String actual = $("[data-test-id='phone']").$("[input__sub]").getText();
-//        assertEquals(expected.trim(), actual.trim());
-//    }
-//
-//    @Test
-//    void shouldRequireValidTelephoneNumberIfTenNumbersTest() {
-//        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
-//        LocalDate localDate = LocalDate.now();
-//        LocalDate newDate = localDate.plusDays(3);
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-//        String dateText = newDate.format(formatter);
-//        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
-//        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
-//        $("[data-test-id='phone']").$("[name='phone']").setValue("+7012345678");
-//        $("[data-test-id='agreement']").click();
-//        $$("button").find(exactText("Забронировать")).click();
-//        String expected = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
-//        String actual = $("[data-test-id='phone']").$("[input__sub]").getText();
-//        assertEquals(expected.trim(), actual.trim());
-//    }
-//
-//    @Test
-//    void shouldRequireValidTelephoneNumberIfElevenNumbersTest() {
-//        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
-//        LocalDate localDate = LocalDate.now();
-//        LocalDate newDate = localDate.plusDays(3);
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-//        String dateText = newDate.format(formatter);
-//        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
-//        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
-//        $("[data-test-id='phone']").$("[name='phone']").setValue("+701234567890");
-//        $("[data-test-id='agreement']").click();
-//        $$("button").find(exactText("Забронировать")).click();
-//        String expected = "Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.";
-//        String actual = $("[data-test-id='phone']").$("[input__sub]").getText();
-//        assertEquals(expected.trim(), actual.trim());
-//    }
-//}
+    @Test
+    void shouldRequireValidNameIfNonCyrillicTest() {
+        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
+        LocalDate localDate = LocalDate.now();
+        LocalDate newDate = localDate.plusDays(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dateText = newDate.format(formatter);
+        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
+        $("[data-test-id= 'name']").$("[name ='name']").setValue("John Snow");
+        $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
+        $("[data-test-id='agreement']").click();
+        $$("button").find(exactText("Забронировать")).click();
+        $("[data-test-id='name'].input_invalid .input__sub").shouldBe(visible)
+                .shouldHave(exactText("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы."));
+    }
+
+    @Test
+    void shouldRequireAgreementCheckboxTest() {
+        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
+        LocalDate localDate = LocalDate.now();
+        LocalDate newDate = localDate.plusDays(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dateText = newDate.format(formatter);
+        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
+        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
+        $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
+        $$("button").find(exactText("Забронировать")).click();
+        $("[data-test-id='agreement'].input_invalid .checkbox__text").shouldBe(visible)
+                .shouldHave(exactText("Я соглашаюсь с условиями обработки и использования моих персональных данных"));
+    }
+
+    @Test
+    void shouldRequireValidPhoneNumberIfNoPlusTest() {
+        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
+        LocalDate localDate = LocalDate.now();
+        LocalDate newDate = localDate.plusDays(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dateText = newDate.format(formatter);
+        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
+        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
+        $("[data-test-id='phone']").$("[name='phone']").setValue("70123456789");
+        $("[data-test-id='agreement']").click();
+        $$("button").find(exactText("Забронировать")).click();
+        $("[data-test-id='phone'].input_invalid .input__sub").shouldBe(visible)
+                .shouldHave(exactText("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
+    }
+
+    @Test
+    void shouldRequireValidPhoneNumberIfTenNumbersTest() {
+        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
+        LocalDate localDate = LocalDate.now();
+        LocalDate newDate = localDate.plusDays(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dateText = newDate.format(formatter);
+        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
+        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
+        $("[data-test-id='phone']").$("[name='phone']").setValue("+7012345678");
+        $("[data-test-id='agreement']").click();
+        $$("button").find(exactText("Забронировать")).click();
+        $("[data-test-id='phone'].input_invalid .input__sub").shouldBe(visible)
+                .shouldHave(exactText("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
+    }
+
+    @Test
+    void shouldRequireValidPhoneNumberIfTwelveNumbersTest() {
+        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
+        LocalDate localDate = LocalDate.now();
+        LocalDate newDate = localDate.plusDays(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dateText = newDate.format(formatter);
+        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
+        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
+        $("[data-test-id='phone']").$("[name='phone']").setValue("+701234567890");
+        $("[data-test-id='agreement']").click();
+        $$("button").find(exactText("Забронировать")).click();
+        $("[data-test-id='phone'].input_invalid .input__sub").shouldBe(visible)
+                .shouldHave(exactText("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
+    }
+
+    @Test
+    void shouldRequireValidCityIfEmptyCityFieldTest() {
+        $("[data-test-id='city']").$("[placeholder='Город']").setValue("");
+        LocalDate localDate = LocalDate.now();
+        LocalDate newDate = localDate.plusDays(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dateText = newDate.format(formatter);
+        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
+        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
+        $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
+        $("[data-test-id='agreement']").click();
+        $$("button").find(exactText("Забронировать")).click();
+        $("[data-test-id='city'].input_invalid .input__sub").shouldBe(visible).
+                shouldHave(exactText("Поле обязательно для заполнения"));
+    }
+
+    @Test
+    void shouldRequireValidDateIfEmptyDateFieldTest() {
+        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
+        $("[data-test-id='date']").$("[class='input__control']").setValue("");
+        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
+        $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
+        $("[data-test-id='agreement']").click();
+        $$("button").find(exactText("Забронировать")).click();
+        $("[data-test-id='date'].input_invalid .input__sub").shouldBe(visible).
+                shouldHave(exactText("Неверно введена дата"));
+    }
+
+    @Test
+    void shouldRequireValidNameIfEmptyNameFieldTest() {
+        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
+        LocalDate localDate = LocalDate.now();
+        LocalDate newDate = localDate.plusDays(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dateText = newDate.format(formatter);
+        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
+        $("[data-test-id= 'name']").$("[name ='name']").setValue("");
+        $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
+        $("[data-test-id='agreement']").click();
+        $$("button").find(exactText("Забронировать")).click();
+        $("[data-test-id='name'].input_invalid .input__sub").shouldBe(visible)
+                .shouldHave(exactText("Поле обязательно для заполнения"));
+    }
+
+    @Test
+    void shouldRequireValidPhoneNumberIfEmptyPhoneFieldTest() {
+        $("[data-test-id='city']").$("[placeholder='Город']").setValue("Санкт-Петербург");
+        LocalDate localDate = LocalDate.now();
+        LocalDate newDate = localDate.plusDays(3);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String dateText = newDate.format(formatter);
+        $("[data-test-id='date']").$("[placeholder='Дата встречи']").setValue(dateText);
+        $("[data-test-id= 'name']").$("[name ='name']").setValue("Михаил Салтыков-Щедрин");
+        $("[data-test-id='phone']").$("[name='phone']").setValue("");
+        $("[data-test-id='agreement']").click();
+        $$("button").find(exactText("Забронировать")).click();
+        $("[data-test-id='phone'].input_invalid .input__sub").shouldBe(visible)
+                .shouldHave(exactText("Поле обязательно для заполнения"));
+    }
+}
+
 
 
