@@ -3,6 +3,7 @@ package ru.netology;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -25,6 +26,8 @@ public class CreditCardDeliveryFormUITest {
     @BeforeEach
     void setUp() {
         open("http://localhost:9999");
+        $("[data-test-id='date']").$("[class='input__control']").click();
+        $("[data-test-id='date']").$("[class='input__control']").sendKeys(Keys.chord(Keys.CONTROL + "A", Keys.DELETE));
     }
 
     @AfterEach
@@ -64,7 +67,7 @@ public class CreditCardDeliveryFormUITest {
         $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
         $("[data-test-id='agreement']").click();
         $$("button").find(exactText("Забронировать")).click();
-        $("[data-test-id='date'].input_invalid .input__sub").shouldBe(visible).
+        $("[data-test-id='date'] .input__sub").shouldBe(visible).
                 shouldHave(exactText("Заказ на выбранную дату невозможен"));
     }
 
@@ -77,7 +80,7 @@ public class CreditCardDeliveryFormUITest {
         $("[data-test-id='agreement']").click();
         $$("button").find(exactText("Забронировать")).click();
         $("[data-test-id='notification']").shouldBe(visible, Duration.ofSeconds(15)).
-                shouldHave(exactText("Успешно!\n" + "Встреча успешно забронирована на " + formatDeliveryDate(3)));
+                shouldHave(exactText("Успешно!\n" + "Встреча успешно забронирована на " + formatDeliveryDate(4)));
     }
 
     @Test
@@ -159,7 +162,7 @@ public class CreditCardDeliveryFormUITest {
         $("[data-test-id='phone']").$("[name='phone']").setValue("+70123456789");
         $("[data-test-id='agreement']").click();
         $$("button").find(exactText("Забронировать")).click();
-        $("[data-test-id='date'].input_invalid .input__sub").shouldBe(visible).
+        $("[data-test-id='date'] .input__sub").shouldBe(visible).
                 shouldHave(exactText("Неверно введена дата"));
     }
 
